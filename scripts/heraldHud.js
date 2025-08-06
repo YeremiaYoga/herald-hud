@@ -1463,28 +1463,29 @@ async function heraldHud_updateItemFavoriteActor() {
         if (item.system.uses?.max) {
           favoriteUses = `- (${item.system.uses.value}/${item.system.uses.max})`;
         }
-
+        const firstActivity =
+          item.system.activities?.values().next().value ?? null;
         let category = ``;
-        if (item.system.activation.type == "action") {
-          category = `<i class="fa-solid fa-circle" style="color:#1f6237;" ></i>`;
-        } else if (item.system.activation.type.includes("bonus")) {
-          category = `<i class="fa-solid fa-square-plus" style="color:#d5530b;"></i>`;
-        } else if (item.system.activation.type.includes("reaction")) {
-          category = `<i class="fa-solid fa-rotate-right" style="color:#fe85f6;"></i>`;
-        } else if (item.system.activation.type.includes("legendary")) {
-          category = `<i class="fa-solid fa-dragon" style="color:#0a35d1;"></i>`;
-        } else if (item.system.activation.type.includes("lair")) {
-          category = `<i class="fa-solid fa-chess-rook" style="color:#c7cad6;"></i>`;
-        } else if (item.system.activation.type.includes("mythic")) {
-          category = `<i class="fa-solid fa-spaghetti-monster-flying" style="color:#adffeb;"></i>`;
-        } else if (item.system.activation.type.includes("minute")) {
-          category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i>`;
-        } else if (item.system.activation.type.includes("hour")) {
-          category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i>`;
-        } else if (item.system.activation.type.includes("day")) {
-          category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i>`;
-        } else if (item.system.activation.type.includes("special")) {
-          category = `<i class="fa-solid fa-sparkles" style="color:#d0f4fc;"></i>`;
+        if (firstActivity.activation.type == "action") {
+          category = `<i class="fa-solid fa-circle" style="color:#1f6237;"></i> Action`;
+        } else if (firstActivity.activation.type.includes("bonus")) {
+          category = `<i class="fa-solid fa-square-plus" style="color:#d5530b;"></i> Bonus Action`;
+        } else if (firstActivity.activation.type.includes("reaction")) {
+          category = `<i class="fa-solid fa-rotate-right" style="color:#fe85f6;"></i> Reaction`;
+        } else if (firstActivity.activation.type.includes("legendary")) {
+          category = `<i class="fa-solid fa-dragon" style="color:#0a35d1;"></i> Legendary Action`;
+        } else if (firstActivity.activation.type.includes("lair")) {
+          category = `<i class="fa-solid fa-chess-rook" style="color:#c7cad6;"></i> Lair Action`;
+        } else if (firstActivity.activation.type.includes("mythic")) {
+          category = `<i class="fa-solid fa-spaghetti-monster-flying" style="color:#adffeb;"></i> Mythic Action`;
+        } else if (firstActivity.activation.type.includes("minute")) {
+          category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Minute`;
+        } else if (firstActivity.activation.type.includes("hour")) {
+          category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Hour`;
+        } else if (firstActivity.activation.type.includes("day")) {
+          category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Day`;
+        } else if (firstActivity.activation.type.includes("special")) {
+          category = `<i class="fa-solid fa-sparkles" style="color:#d0f4fc;"></i> Special`;
         }
 
         let itemRarity = item.system?.rarity || "Unknown";
@@ -3927,26 +3928,28 @@ async function heraldHud_getDataSpellsPrep() {
           labelProperti = arrProperti.join(" | ");
         }
 
+        const firstActivity =
+          item.system.activities?.values().next().value ?? null;
         let activeType = ``;
-        if (item.system.activation.type == "action") {
+        if (firstActivity.activation.type == "action") {
           activeType = `<i class="fa-solid fa-circle" style="color:#1f6237;"></i> Action`;
-        } else if (item.system.activation.type.includes("bonus")) {
+        } else if (firstActivity.activation.type.includes("bonus")) {
           activeType = `<i class="fa-solid fa-square-plus" style="color:#d5530b;"></i> Bonus Action`;
-        } else if (item.system.activation.type.includes("reaction")) {
+        } else if (firstActivity.activation.type.includes("reaction")) {
           activeType = `<i class="fa-solid fa-rotate-right" style="color:#fe85f6;"></i> Reaction`;
-        } else if (item.system.activation.type.includes("legendary")) {
+        } else if (firstActivity.activation.type.includes("legendary")) {
           activeType = `<i class="fa-solid fa-dragon" style="color:#0a35d1;"></i> Legendary Action`;
-        } else if (item.system.activation.type.includes("lair")) {
+        } else if (firstActivity.activation.type.includes("lair")) {
           activeType = `<i class="fa-solid fa-chess-rook" style="color:#c7cad6;"></i> Lair Action`;
-        } else if (item.system.activation.type.includes("mythic")) {
+        } else if (firstActivity.activation.type.includes("mythic")) {
           activeType = `<i class="fa-solid fa-spaghetti-monster-flying" style="color:#adffeb;"></i> Mythic Action`;
-        } else if (item.system.activation.type.includes("minute")) {
-          activeType = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${item.system.activation.cost} Minute`;
-        } else if (item.system.activation.type.includes("hour")) {
-          activeType = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${item.system.activation.cost} Hour`;
-        } else if (item.system.activation.type.includes("day")) {
-          activeType = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${item.system.activation.cost} Day`;
-        } else if (item.system.activation.type.includes("special")) {
+        } else if (firstActivity.activation.type.includes("minute")) {
+          activeType = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Minute`;
+        } else if (firstActivity.activation.type.includes("hour")) {
+          activeType = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Hour`;
+        } else if (firstActivity.activation.type.includes("day")) {
+          activeType = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Day`;
+        } else if (firstActivity.activation.type.includes("special")) {
           activeType = `<i class="fa-solid fa-sparkles" style="color:#d0f4fc;"></i> Special`;
         }
 
