@@ -1,0 +1,278 @@
+<div id="heraldHud" class="heraldHud">
+  <div id="heraldHud-container" class="heraldHud-container">
+    <div id="heraldHud-topContainer" class="heraldHud-topContainer">
+      <div
+        id="heraldHud-settingHudContainer"
+        class="heraldHud-settingHudContainer"
+      ></div>
+      <div
+      id="heraldHud-actorInfoContainer"
+      class="heraldHud-actorInfoContainer"
+      ></div>
+      <div
+        id="heraldHud-listEffectContainer"
+        class="heraldHud-listEffectContainer"
+      ></div>
+      <div
+        id="heraldHud-listNpcContainer"
+        class="heraldHud-listNpcContainer"
+      ></div>
+      <div
+        id="heraldHud-addSummonContainer"
+        class="heraldHud-addSummonContainer"
+      ></div>
+    </div>
+    <div id="heraldHud-middleContainer" class="heraldHud-middleContainer">
+      <div
+        id="heraldHud-chargeTrackerContainer"
+        class="heraldHud-chargeTrackerContainer"
+      ></div>
+      <div
+        id="heraldHud-overlayThorn0hpContainer"
+        class="heraldHud-overlayThorn0hpContainer"
+      ></div>
+       <div
+        id="heraldHud-overlayThornButtonContainer"
+        class="heraldHud-overlayThornButtonContainer"
+      ></div>
+      <div id="heraldHud-barContainer" class="heraldHud-barContainer">
+        <div id="heraldHud-hpBarContainer" class="heraldHud-hpBarContainer">
+          <svg
+            width="130"
+            height="130"
+            viewBox="0 0 100 100"
+            class="heraldHud-actorHpSvg"
+          >
+            <defs>
+              <linearGradient
+                id="heraldHud_hpGradient"
+                x1="0%"
+                y1="0%"
+                x2="100%"
+                y2="0%"
+              ></linearGradient>
+            </defs>
+            <circle
+              cx="50"
+              cy="50"
+              r="45"
+              id="heraldHud-actorHpBackground"
+              class="heraldHud-actorHpBackground"
+              stroke-dasharray="310"
+              stroke-dashoffset="200"
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="45"
+              id="heraldHud-actorHpBarDelay"
+              class="heraldHud-actorHpBarDelay"
+              stroke-dasharray="310"
+              stroke-dashoffset="200"
+            />
+            <circle
+              cx="50"
+              cy="50"
+              r="45"
+              id="heraldHud-actorHpBar"
+              class="heraldHud-actorHpBar"
+              stroke="url(#heraldHud_hpGradient)"
+              stroke-dasharray="310"
+              stroke-dashoffset="200"
+            />
+          </svg>
+        </div>
+        <div
+          id="heraldHud-tempHpBarContainer"
+          class="heraldHud-tempHpBarContainer"
+        ></div>
+      </div>
+      <div id="heraldHud-imageContainer" class="heraldHud-imageContainer">
+      </div>
+      <div id="heraldHud-hudContainer" class="heraldHud-hudContainer">
+        <div
+          id="heraldHud-hudOverlayImageContainer"
+          class="heraldHud-hudOverlayImageContainer"
+        >
+         
+        </div>
+        <div id="heraldHud-hudBoxleft" class="heraldHud-hudBoxleft">
+          <div
+            id="heraldHud-walkSpeedContainer"
+            class="heraldHud-walkSpeedContainer"
+          >
+            <div id="heraldHud-walkSpeedName" class="heraldHud-walkSpeedName">
+              Speed
+            </div>
+            <div
+              id="heraldHud-walkSpeedValue"
+              class="heraldHud-walkSpeedValue"
+            ></div>
+            <div
+              id="heraldHud-walkSpeedTooltip"
+              class="heraldHud-walkSpeedTooltip"
+            >
+              Walking
+            </div>
+          </div>
+          <div
+            id="heraldHud-speedIconContainer"
+            class="heraldHud-speedIconContainer"
+          ></div>
+        </div>
+        <div id="heraldHud-hudBoxMiddle" class="heraldHud-hudBoxMiddle">
+          <div
+            id="heraldHud-favoritesContainer"
+            class="heraldHud-favoritesContainer"
+          >
+            <div
+              id="heraldHud-favoritesListItem"
+              class="heraldHud-favoritesListItem"
+            ></div>
+            <div
+              id="heraldHud-favoriteItemTooltip"
+              class="heraldHud-favoriteItemTooltip"
+            >
+              <div
+                id="heraldHud-favoriteTooltipTop"
+                class="heraldHud-favoriteTooltipTop"
+              >
+                <div
+                  id="heraldHud-favoriteTooltipTypeItem"
+                  class="heraldHud-favoriteTooltipTypeItem"
+                ></div>
+                <div
+                  id="heraldHud-favoriteTooltipNameItem"
+                  class="heraldHud-favoriteTooltipNameItem"
+                ></div>
+                <div
+                  id="heraldHud-favoriteTooltipChargeItem"
+                  class="heraldHud-favoriteTooltipChargeItem"
+                ></div>
+              </div>
+              <div
+                id="heraldHud-favoriteTooltipMiddle"
+                class="heraldHud-favoriteTooltipMiddle"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <div id="heraldHud-hudBoxRight" class="heraldHud-hudBoxRight">
+          <div
+            id="heraldHud-consumableItemContainer"
+            class="heraldHud-consumableItemContainer"
+          >
+            <div
+              id="heraldHud-listConsumableItem"
+              class="heraldHud-listConsumableItem"
+            ></div>
+            <div
+              id="heraldHud-consumableItemTooltip"
+              class="heraldHud-consumableItemTooltip"
+            >
+              <div
+                id="heraldHud-consumableTooltipTop"
+                class="heraldHud-consumableTooltipTop"
+              >
+                <div
+                  id="heraldHud-consumableTooltipNameItem"
+                  class="heraldHud-consumableTooltipNameItem"
+                ></div>
+                <div
+                  id="heraldHud-consumableTooltipQtyItem"
+                  class="heraldHud-consumableTooltipQtyItem"
+                ></div>
+                <div
+                  id="heraldHud-consumableTooltipChargeItem"
+                  class="heraldHud-consumableTooltipChargeItem"
+                ></div>
+              </div>
+              <div
+                id="heraldHud-consumableTooltipMiddle"
+                class="heraldHud-consumableTooltipMiddle"
+              ></div>
+            </div>
+          </div>
+          <div
+            id="heraldHud-restShortcutContainer"
+            class="heraldHud-restShortcutContainer"
+          ></div>
+          <div
+            id="heraldHud-equipmentShortcutContainer"
+            class="heraldHud-equipmentShortcutContainer"
+          ></div>
+        </div>
+      </div>
+    </div>
+    <div id="heraldHud-bottomContainer" class="heraldHud-bottomContainer">
+      <div id="heraldHud-barValueContainer" class="heraldHud-barValueContainer">
+        <div id="heraldHud-hpValueContainer" class="heraldHud-hpValueContainer">
+          <div id="heraldHud-hpValue" class="heraldHud-hpValue">
+            <input
+              id="heraldHud-hpValueInput"
+              class="heraldHud-hpValueInput"
+              type="text"
+              value=""
+            />
+          </div>
+          <div id="heraldHud-hpMaxValue" class="heraldHud-hpMaxValue"></div>
+          <div
+            id="heraldHud-tempHpMaxValue"
+            class="heraldHud-tempHpMaxValue"
+          ></div>
+        </div>
+        <div id="heraldHud-tempHpValue" class="heraldHud-tempHpValue">
+          <div id="heraldHud-tempPlusIcon" class="heraldHud-tempPlusIcon"></div>
+          <input
+            id="heraldHud-tempHpValueInput"
+            class="heraldHud-tempHpValueInput"
+            type="number"
+            value=""
+          />
+        </div>
+      </div>
+      <div
+        id="heraldHud-tempShieldContainer"
+        class="heraldHud-tempShieldContainer"
+      ></div>
+      <div id="heraldHud-acContainer" class="heraldHud-acContainer">
+        <div class="heraldHud-acIconWrapper">
+          <img
+            src="/modules/herald-hud/assets/ac_icon.webp"
+            alt="Armor Class"
+            class="heraldHud-acIcon"
+          />
+          <div id="heraldHud-acValue" class="heraldHud-acValue"></div>
+          <div class="heraldHud-acTooltip">Armor Class</div>
+        </div>
+      </div>
+
+      <div
+        id="heraldHud-actionContainer"
+        class="heraldHud-actionContainer"
+      ></div>
+      <div
+        id="heraldHud-preparedSpellsActionContainer"
+        class="heraldHud-preparedSpellsActionContainer"
+      ></div>
+      <div
+      id="heraldHud-journalingContainer"
+      class="heraldHud-journalingContainer"
+    ></div>
+      <div
+      id="heraldHud-weaponMasteryContainer"
+      class="heraldHud-weaponMasteryContainer"
+     
+    ></div>
+      <div
+        id="heraldHud-inspirationLevelContainer"
+        class="heraldHud-inspirationLevelContainer"
+      ></div>
+      <div
+        id="heraldHud-shortcutButtonContainer"
+        class="heraldHud-shortcutButtonContainer"
+      ></div>
+      </div>
+    </div>
+  </div>
+</div>
