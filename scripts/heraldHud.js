@@ -2013,7 +2013,6 @@ async function heraldHud_getDataInventory() {
     let arrWeaponCategory = [];
     let category = ``;
     const firstActivity = item.system.activities?.values().next().value ?? null;
-
     if (firstActivity.activation.type == "action") {
       category = `<i class="fa-solid fa-circle" style="color:#1f6237;"></i> Action`;
     } else if (firstActivity.activation.type.includes("bonus")) {
