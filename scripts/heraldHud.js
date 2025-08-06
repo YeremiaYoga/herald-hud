@@ -1909,7 +1909,7 @@ async function heraldHud_getDataInventory() {
   }
 
   let favoritesActor = actor.system?.favorites || [];
-  for (const item of filteredWeapon) {
+  filteredWeapon.forEach((item) => {
     if (
       heraldHud_arrFilterItem.length > 0 &&
       !heraldHud_arrFilterItem.includes(item.system.activation?.type)
@@ -1925,18 +1925,11 @@ async function heraldHud_getDataInventory() {
       : "";
     let isEquipped = item.system.equipped ? "equipped" : "";
     let htmlDescription = ``;
-
     if (item.system?.identified === false) {
       htmlDescription = item.system.unidentified.description;
     } else {
       htmlDescription = item.system.description.value;
     }
-    const enriched = await TextEditor.enrichHTML(htmlDescription, {
-      async: true,
-      secrets: true,
-      documents: true,
-    });
-
     let arrProperti = [];
     let labelProperti = "";
 
@@ -1946,22 +1939,14 @@ async function heraldHud_getDataInventory() {
     if (item.labels.save) {
       arrProperti.push(item.labels.save);
     }
-    if (foundry.utils.isNewerVersion(heraldHud_gameVersion, "3.3.1")) {
-      if (item.labels.damages) {
-        for (let damage of item.labels.damages) {
-          let damageIcon = hl.heraldHud_getGameIconDamage(damage.damageType);
-          arrProperti.push(`${damage.formula} ${damageIcon}`);
-        }
-      }
-    } else {
-      if (item.labels.damage) {
-        for (let damage of item.labels.derivedDamage) {
-          let damageIcon = hl.heraldHud_getGameIconDamage(damage.damageType);
 
-          arrProperti.push(`${damage.formula} ${damageIcon}`);
-        }
+    if (item.labels.damages) {
+      for (let damage of item.labels.damages) {
+        let damageIcon = hl.heraldHud_getGameIconDamage(damage.damageType);
+        arrProperti.push(`${damage.formula} ${damageIcon}`);
       }
     }
+
     if (arrProperti.length > 0) {
       labelProperti = arrProperti.join(" | ");
     }
@@ -2027,25 +2012,27 @@ async function heraldHud_getDataInventory() {
     }
     let arrWeaponCategory = [];
     let category = ``;
-    if (item.system.activation.type == "action") {
+    const firstActivity = item.system.activities?.values().next().value ?? null;
+
+    if (firstActivity.activation.type == "action") {
       category = `<i class="fa-solid fa-circle" style="color:#1f6237;"></i> Action`;
-    } else if (item.system.activation.type.includes("bonus")) {
+    } else if (firstActivity.activation.type.includes("bonus")) {
       category = `<i class="fa-solid fa-square-plus" style="color:#d5530b;"></i> Bonus Action`;
-    } else if (item.system.activation.type.includes("reaction")) {
+    } else if (firstActivity.activation.type.includes("reaction")) {
       category = `<i class="fa-solid fa-rotate-right" style="color:#fe85f6;"></i> Reaction`;
-    } else if (item.system.activation.type.includes("legendary")) {
+    } else if (firstActivity.activation.type.includes("legendary")) {
       category = `<i class="fa-solid fa-dragon" style="color:#0a35d1;"></i> Legendary Action`;
-    } else if (item.system.activation.type.includes("lair")) {
+    } else if (firstActivity.activation.type.includes("lair")) {
       category = `<i class="fa-solid fa-chess-rook" style="color:#c7cad6;"></i> Lair Action`;
-    } else if (item.system.activation.type.includes("mythic")) {
+    } else if (firstActivity.activation.type.includes("mythic")) {
       category = `<i class="fa-solid fa-spaghetti-monster-flying" style="color:#adffeb;"></i> Mythic Action`;
-    } else if (item.system.activation.type.includes("minute")) {
-      category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${item.system.activation.cost} Minute`;
-    } else if (item.system.activation.type.includes("hour")) {
-      category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${item.system.activation.cost} Hour`;
-    } else if (item.system.activation.type.includes("day")) {
-      category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${item.system.activation.cost} Day`;
-    } else if (item.system.activation.type.includes("special")) {
+    } else if (firstActivity.activation.type.includes("minute")) {
+      category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Minute`;
+    } else if (firstActivity.activation.type.includes("hour")) {
+      category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Hour`;
+    } else if (firstActivity.activation.type.includes("day")) {
+      category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Day`;
+    } else if (firstActivity.activation.type.includes("special")) {
       category = `<i class="fa-solid fa-sparkles" style="color:#d0f4fc;"></i> Special`;
     }
 
@@ -2107,13 +2094,13 @@ async function heraldHud_getDataInventory() {
         <div  class="heraldHud-dialogWeaponTooltip">
           <div class="heraldHud-weaponTooltipTop">${item.name}  
           <hr style=" border: 1px solid grey; margin-top: 5px;"></div>
-          <div class="heraldHud-weaponTooltipMiddle">${enriched} 
+          <div class="heraldHud-weaponTooltipMiddle">${htmlDescription} 
           <hr style=" border: 1px solid grey; margin-top: 5px;"></div>
           <div class="heraldHud-weaponTooltipBottom">${labelPropertiTooltip}</div>
         </div>
       </div>
       `;
-  }
+  });
 
   if (heraldHud_listWeaponDiv) {
     heraldHud_listWeaponDiv.innerHTML = listWeapons;
@@ -2210,7 +2197,7 @@ async function heraldHud_getDataInventory() {
     filteredTool = toolsItem;
   }
 
-  for (const item of filteredTool) {
+  filteredTool.forEach((item) => {
     if (
       heraldHud_arrFilterItem.length > 0 &&
       !heraldHud_arrFilterItem.includes(item.system.activation?.type)
@@ -2231,12 +2218,6 @@ async function heraldHud_getDataInventory() {
     } else {
       htmlDescription = item.system.description.value;
     }
-    const enriched = await TextEditor.enrichHTML(htmlDescription, {
-      async: true,
-      secrets: true,
-      documents: true,
-    });
-
     let arrToolCategory = [];
     let toolItemUses = "";
 
@@ -2281,14 +2262,14 @@ async function heraldHud_getDataInventory() {
         <hr style=" border: 1px solid grey; margin-top: 5px;">
         </div>
         <div class="heraldHud-toolTooltipMiddle">
-        ${enriched}
+        ${htmlDescription}
         <hr style=" border: 1px solid grey; margin-top: 5px;">
         </div>
         <div class="heraldHud-toolTooltipBottom"></div>
       </div>
     </div>
     `;
-  }
+  });
 
   if (listTools == "") {
     listTools = `
@@ -2381,7 +2362,7 @@ async function heraldHud_getDataInventory() {
     filteredConsumable = consumablesItem;
   }
 
-  for (const item of filteredConsumable) {
+  filteredConsumable.forEach((item) => {
     if (
       heraldHud_arrFilterItem.length > 0 &&
       !heraldHud_arrFilterItem.includes(item.system.activation?.type)
@@ -2394,12 +2375,6 @@ async function heraldHud_getDataInventory() {
     } else {
       htmlDescription = item.system.description.value;
     }
-
-    const enriched = await TextEditor.enrichHTML(htmlDescription, {
-      async: true,
-      secrets: true,
-      documents: true,
-    });
 
     let consumableItemUses = "";
 
@@ -2461,14 +2436,14 @@ async function heraldHud_getDataInventory() {
         <hr style=" border: 1px solid grey; margin-top: 5px;">
         </div>
         <div class="heraldHud-consumableTooltipMiddle">
-        ${enriched}
+        ${htmlDescription}
         <hr style=" border: 1px solid grey; margin-top: 5px;">
         </div>
         <div class="heraldHud-consumableTooltipBottom"></div>
       </div>
     </div>
     `;
-  }
+  });
 
   if (heraldHud_listConsumableDiv) {
     heraldHud_listConsumableDiv.innerHTML = listConsumables;
@@ -2851,7 +2826,7 @@ async function heraldHud_getDataFeatures() {
   let listFeaturesPassive = ``;
   let favoritesActor = actor.system?.favorites || [];
 
-  for (const item of filteredFeatures) {
+  filteredFeatures.forEach((item) => {
     if (
       heraldHud_arrFilterItem.length > 0 &&
       !heraldHud_arrFilterItem.includes(item.system.activation?.type)
@@ -2859,38 +2834,36 @@ async function heraldHud_getDataFeatures() {
       return;
     }
     let htmlDescription = item.system.description.value;
-    const enriched = await TextEditor.enrichHTML(htmlDescription, {
-      async: true,
-      secrets: true,
-      documents: true,
-    });
     let rawItemId = `.Item.${item.id}`;
     let isFavorited = favoritesActor.some(
       (favorite) => favorite.id === rawItemId
     )
       ? "favorited"
       : "";
-    if (item.system.activation?.type) {
+
+    const firstActivity = item.system.activities?.values().next().value ?? null;
+    console.log(item.system);
+    if (firstActivity) {
       let category = ``;
-      if (item.system.activation.type == "action") {
+      if (firstActivity.activation.type == "action") {
         category = `<i class="fa-solid fa-circle" style="color:#1f6237;"></i> Action`;
-      } else if (item.system.activation.type.includes("bonus")) {
+      } else if (firstActivity.activation.type.includes("bonus")) {
         category = `<i class="fa-solid fa-square-plus" style="color:#d5530b;"></i> Bonus Action`;
-      } else if (item.system.activation.type.includes("reaction")) {
+      } else if (firstActivity.activation.type.includes("reaction")) {
         category = `<i class="fa-solid fa-rotate-right" style="color:#fe85f6;"></i> Reaction`;
-      } else if (item.system.activation.type.includes("legendary")) {
+      } else if (firstActivity.activation.type.includes("legendary")) {
         category = `<i class="fa-solid fa-dragon" style="color:#0a35d1;"></i> Legendary Action`;
-      } else if (item.system.activation.type.includes("lair")) {
+      } else if (firstActivity.activation.type.includes("lair")) {
         category = `<i class="fa-solid fa-chess-rook" style="color:#c7cad6;"></i> Lair Action`;
-      } else if (item.system.activation.type.includes("mythic")) {
+      } else if (firstActivity.activation.type.includes("mythic")) {
         category = `<i class="fa-solid fa-spaghetti-monster-flying" style="color:#adffeb;"></i> Mythic Action`;
-      } else if (item.system.activation.type.includes("minute")) {
-        category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${item.system.activation.cost} Minute`;
-      } else if (item.system.activation.type.includes("hour")) {
-        category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${item.system.activation.cost} Hour`;
-      } else if (item.system.activation.type.includes("day")) {
-        category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${item.system.activation.cost} Day`;
-      } else if (item.system.activation.type.includes("special")) {
+      } else if (firstActivity.activation.type.includes("minute")) {
+        category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Minute`;
+      } else if (firstActivity.activation.type.includes("hour")) {
+        category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Hour`;
+      } else if (firstActivity.activation.type.includes("day")) {
+        category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Day`;
+      } else if (firstActivity.activation.type.includes("special")) {
         category = `<i class="fa-solid fa-sparkles" style="color:#d0f4fc;"></i> Special`;
       }
       let arrFeaturesCategory = [];
@@ -2915,22 +2888,14 @@ async function heraldHud_getDataFeatures() {
       if (item.labels.save) {
         arrProperti.push(item.labels.save);
       }
-      if (foundry.utils.isNewerVersion(heraldHud_gameVersion, "3.3.1")) {
-        if (item.labels.damages) {
-          for (let damage of item.labels.damages) {
-            let damageIcon = hl.heraldHud_getGameIconDamage(damage.damageType);
-            arrProperti.push(`${damage.formula} ${damageIcon}`);
-          }
-        }
-      } else {
-        if (item.labels.damage) {
-          for (let damage of item.labels.derivedDamage) {
-            let damageIcon = hl.heraldHud_getGameIconDamage(damage.damageType);
 
-            arrProperti.push(`${damage.formula} ${damageIcon}`);
-          }
+      if (item.labels.damages) {
+        for (let damage of item.labels.damages) {
+          let damageIcon = hl.heraldHud_getGameIconDamage(damage.damageType);
+          arrProperti.push(`${damage.formula} ${damageIcon}`);
         }
       }
+
       if (arrProperti.length > 0) {
         labelProperti = arrProperti.join(" | ");
       }
@@ -2963,7 +2928,7 @@ async function heraldHud_getDataFeatures() {
           <div id="heraldHud-dialogFeaturesTooltip" class="heraldHud-dialogFeaturesTooltip">
             <div class="heraldHud-featuresTooltipTop">${item.name}  
             <hr style=" border: 1px solid grey; margin-top: 5px;"></div>
-            <div class="heraldHud-weaponTooltipMiddle">${enriched} 
+            <div class="heraldHud-weaponTooltipMiddle">${htmlDescription} 
             <hr style=" border: 1px solid grey; margin-top: 5px;"></div>
             <div class="heraldHud-featuresTooltipBottom"></div>
           </div>
@@ -2988,14 +2953,14 @@ async function heraldHud_getDataFeatures() {
           <div id="heraldHud-dialogFeaturesTooltip" class="heraldHud-dialogFeaturesTooltip">
             <div class="heraldHud-featuresTooltipTop">${item.name}  
             <hr style=" border: 1px solid grey; margin-top: 5px;"></div>
-            <div class="heraldHud-weaponTooltipMiddle">${enriched} 
+            <div class="heraldHud-weaponTooltipMiddle">${htmlDescription} 
             <hr style=" border: 1px solid grey; margin-top: 5px;"></div>
             <div class="heraldHud-featuresTooltipBottom"></div>
           </div>
         </div>
       `;
     }
-  }
+  });
 
   if (featuresActiveDiv) {
     featuresActiveDiv.innerHTML = listFeaturesActive;
@@ -3281,7 +3246,7 @@ async function heraldHud_getDataSpellsList() {
       }
     }
   });
-  let arrSpells = [
+  [
     "atWill",
     "innate",
     "cantrip",
@@ -3296,8 +3261,7 @@ async function heraldHud_getDataSpellsList() {
     "8",
     "9",
     "ritual",
-  ];
-  for (const key of arrSpells) {
+  ].forEach((key) => {
     let { title, spells } = spellCategories[key];
     if (spells.length > 0) {
       let spellSlotDisplay = ``;
@@ -3312,7 +3276,7 @@ async function heraldHud_getDataSpellsList() {
         <div class="heraldHud-spellLevelTitle">${title}</div>
         <div class="heraldHud-spellLevelSlot" data-level="${key}">${spellSlotDisplay}</div>
       </div>`;
-      for (const item of spells) {
+      spells.forEach((item) => {
         let rawItemId = `.Item.${item.id}`;
         let isFavorited = favoritesActor.some(
           (favorite) => favorite.id === rawItemId
@@ -3329,50 +3293,40 @@ async function heraldHud_getDataSpellsList() {
         if (item.labels.save) {
           arrProperti.push(item.labels.save);
         }
-        if (foundry.utils.isNewerVersion(heraldHud_gameVersion, "3.3.1")) {
-          if (item.labels.damages) {
-            for (let damage of item.labels.damages) {
-              let damageIcon = hl.heraldHud_getGameIconDamage(
-                damage.damageType
-              );
-              arrProperti.push(`${damage.formula} ${damageIcon}`);
-            }
-          }
-        } else {
-          if (item.labels.damage) {
-            for (let damage of item.labels.derivedDamage) {
-              let damageIcon = hl.heraldHud_getGameIconDamage(
-                damage.damageType
-              );
 
-              arrProperti.push(`${damage.formula} ${damageIcon}`);
-            }
+        if (item.labels.damages) {
+          for (let damage of item.labels.damages) {
+            let damageIcon = hl.heraldHud_getGameIconDamage(damage.damageType);
+            arrProperti.push(`${damage.formula} ${damageIcon}`);
           }
         }
+
         if (arrProperti.length > 0) {
           labelProperti = arrProperti.join(" | ");
         }
 
         let activeType = ``;
-        if (item.system.activation.type == "action") {
+        const firstActivity =
+          item.system.activities?.values().next().value ?? null;
+        if (firstActivity.activation.type == "action") {
           activeType = `<i class="fa-solid fa-circle" style="color:#1f6237;"></i> Action`;
-        } else if (item.system.activation.type.includes("bonus")) {
+        } else if (firstActivity.activation.type.includes("bonus")) {
           activeType = `<i class="fa-solid fa-square-plus" style="color:#d5530b;"></i> Bonus Action`;
-        } else if (item.system.activation.type.includes("reaction")) {
+        } else if (firstActivity.activation.type.includes("reaction")) {
           activeType = `<i class="fa-solid fa-rotate-right" style="color:#fe85f6;"></i> Reaction`;
-        } else if (item.system.activation.type.includes("legendary")) {
+        } else if (firstActivity.activation.type.includes("legendary")) {
           activeType = `<i class="fa-solid fa-dragon" style="color:#0a35d1;"></i> Legendary Action`;
-        } else if (item.system.activation.type.includes("lair")) {
+        } else if (firstActivity.activation.type.includes("lair")) {
           activeType = `<i class="fa-solid fa-chess-rook" style="color:#c7cad6;"></i> Lair Action`;
-        } else if (item.system.activation.type.includes("mythic")) {
+        } else if (firstActivity.activation.type.includes("mythic")) {
           activeType = `<i class="fa-solid fa-spaghetti-monster-flying" style="color:#adffeb;"></i> Mythic Action`;
-        } else if (item.system.activation.type.includes("minute")) {
-          activeType = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${item.system.activation.cost} Minute`;
-        } else if (item.system.activation.type.includes("hour")) {
-          activeType = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${item.system.activation.cost} Hour`;
-        } else if (item.system.activation.type.includes("day")) {
-          activeType = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${item.system.activation.cost} Day`;
-        } else if (item.system.activation.type.includes("special")) {
+        } else if (firstActivity.activation.type.includes("minute")) {
+          activeType = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Minute`;
+        } else if (firstActivity.activation.type.includes("hour")) {
+          activeType = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Hour`;
+        } else if (firstActivity.activation.type.includes("day")) {
+          activeType = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Day`;
+        } else if (firstActivity.activation.type.includes("special")) {
           activeType = `<i class="fa-solid fa-sparkles" style="color:#d0f4fc;"></i> Special`;
         }
 
@@ -3405,11 +3359,6 @@ async function heraldHud_getDataSpellsList() {
         let displayRange = spellsRange ? `${spellsRange} ${target}`.trim() : "";
 
         let htmlDescription = item.system.description.value;
-        const enriched = await TextEditor.enrichHTML(htmlDescription, {
-          async: true,
-          secrets: true,
-          documents: true,
-        });
         let arrPropertiTooltip = [];
         let labelPropertiTooltip = "";
         if (key) {
@@ -3475,9 +3424,9 @@ async function heraldHud_getDataSpellsList() {
               </div>
           </div>
         `;
-      }
+      });
     }
-  }
+  });
 
   if (spellListDiv) {
     spellListDiv.innerHTML = listSpells;
@@ -3671,6 +3620,15 @@ async function heraldHud_getDataStats() {
   let abilitiesData = actor.system.abilities;
 
   let listAbilities = ``;
+
+  const abilitiesNames = {
+    str: "Strength",
+    dex: "Dexterity",
+    con: "Constitution",
+    int: "Intelligence",
+    wis: "Wisdom",
+    cha: "Charisma",
+  };
 
   for (let [key, abilityData] of Object.entries(abilitiesData)) {
     let abilityMod =
