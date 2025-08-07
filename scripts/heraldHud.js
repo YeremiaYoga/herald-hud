@@ -6747,7 +6747,7 @@ async function heraldHud_npcGetDataStats(id) {
           let ability = event.target
             .closest(".heraldHud-npcAbilitiesItem")
             .getAttribute("data-ability");
-          npc.rollAbilityTest(ability);
+          npc.rollAbilityCheck({ ability: ability });
         });
       });
 
@@ -6758,7 +6758,7 @@ async function heraldHud_npcGetDataStats(id) {
           let ability = event.target
             .closest(".heraldHud-npcAbilitiesItem")
             .getAttribute("data-ability");
-          npc.rollAbilitySave(ability);
+          npc.rollSavingThrow({ ability: ability });
         });
       });
   }
