@@ -42,11 +42,11 @@ Hooks.once("socketlib.ready", () => {
     "backupHeralHudJournalByPage",
     async (user, journalEntry) => {
       const uuid = journalEntry.uuid;
-      if (journalEntry.flags.category == "Personal Notes") {
+      if (journalEntry.flags["herald-hud"].category == "Personal Notes") {
         await bc.heraldHud_backupJournalPersonalNotes(user, journalEntry);
-      } else if (journalEntry.flags.category == "Party Journal") {
+      } else if (journalEntry.flags["herald-hud"].category == "Party Journal") {
         await bc.heraldHud_backupJournalPartyJournal(journalEntry);
-      } else if (journalEntry.flags.category == "Npcs") {
+      } else if (journalEntry.flags["herald-hud"].category == "Npcs") {
         await bc.heraldHud_backupJournalNpcs(uuid);
       }
     }
@@ -140,7 +140,6 @@ async function heraldHud_renderListMenu() {
 async function heraldHud_showDialogSubMenuDetail(kategori) {
   const user = game.user;
   await heraldHud_showDialog2MenuDetail(kategori);
-  const pack = game.packs.get("herald-hud.herald-hud-backup");
 
   if (kategori == "biography") {
     await heraldHud_getViewBiography();
@@ -447,7 +446,7 @@ async function heraldHud_getViewPersonalNotes() {
 
       let typesSet = new Set();
       for (let journal of personalNotesJournal) {
-        let type = journal.flags?.type;
+        let type = journal.flags["herald-hud"].type;
         if (type) typesSet.add(type);
       }
 
@@ -587,8 +586,10 @@ async function heraldHud_createPersonalNotes(user, input, type) {
     content: "",
     folder: playerFolder.id,
     flags: {
-      type: type,
-      category: "Personal Notes",
+      "herald-hud": {
+        type: type,
+        category: "Personal Notes",
+      },
     },
     ownership: { default: 3 },
   });
@@ -658,7 +659,7 @@ async function heraldHud_renderListPersonalNotesMiddleContainer() {
 
   for (let journal of filteredPersonalNotes) {
     let journalName = journal.name;
-    let type = journal.flags?.type || "";
+    let type = journal.flags["herald-hud"]?.type || "";
 
     const sortedPages = journal.pages.contents.sort((a, b) => a.sort - b.sort);
 
@@ -839,7 +840,7 @@ async function heraldHud_renderListPersonalNotesMiddleContainer() {
         );
         let typesSet = new Set();
         for (let journal of personalNotesJournal) {
-          let type = journal.flags?.type;
+          let type = journal.flags["herald-hud"]?.type;
           if (type) typesSet.add(type);
         }
 
@@ -851,7 +852,7 @@ async function heraldHud_renderListPersonalNotesMiddleContainer() {
         let flagsType = ``;
         for (let type of [...typesSet].sort()) {
           let isChecked = "";
-          if (journal.flags?.type == type) {
+          if (journal.flags["herald-hud"]?.type == type) {
             typeExist = true;
             isChecked = "checked";
           }
@@ -863,7 +864,7 @@ async function heraldHud_renderListPersonalNotesMiddleContainer() {
           `;
         }
         if (!typeExist) {
-          flagsType = journal.flags?.type;
+          flagsType = journal.flags["herald-hud"]?.type;
         }
         let radioButtonDiv = ``;
         if (flagsType == ``) {
@@ -913,11 +914,11 @@ async function heraldHud_renderListPersonalNotesMiddleContainer() {
                   .val();
                 const finalType = newType || selectedRadio || "";
                 journal.name = newName;
-                journal.flags = journal.flags || {};
+                journal.flags = journal.flags["herald-hud"] || {};
                 journal.flags.type = finalType;
                 const journalEntry = await game.journal.get(journal.id).update({
                   name: newName,
-                  flags: { type: finalType },
+                  flags: { "herald-hud": { type: finalType } },
                 });
                 await bc.heraldHud_backupJournalPersonalNotes(
                   user,
@@ -1333,8 +1334,10 @@ async function heraldHud_createPartyJournal(input, type) {
     content: "",
     folder: matchingFolder.id,
     flags: {
-      type: type,
-      category: "Party Journal",
+      "herald-hud": {
+        type: type,
+        category: "Party Journal",
+      },
     },
     ownership: { default: 3 },
   });
@@ -1528,7 +1531,7 @@ async function heraldHud_renderListPartyJournalMiddleContainer() {
 
     for (let journal of filteredPartyJournal) {
       let journalName = journal.name;
-      let type = journal.flags?.type || "";
+      let type = journal.flags["herald-hud"]?.type || "";
 
       const sortedPages = journal.pages.contents.sort(
         (a, b) => a.sort - b.sort
@@ -1536,6 +1539,7 @@ async function heraldHud_renderListPartyJournalMiddleContainer() {
       let pagesHTML = "";
       let pageNumber = 0;
       for (let page of sortedPages) {
+        console.log(page);
         const level = page.title.level || 0;
         let marginLeft = 0;
         if (level === 1) marginLeft = 10;
@@ -1628,7 +1632,7 @@ async function heraldHud_renderListPartyJournalMiddleContainer() {
       });
     });
 
-      const journalNames = dialogMiddle.querySelectorAll(
+    const journalNames = dialogMiddle.querySelectorAll(
       ".heraldHud-partyJournalName"
     );
 
@@ -1689,7 +1693,8 @@ async function heraldHud_renderListPartyJournalMiddleContainer() {
         for (let pj of partyJournals) {
           for (let page of pj.pages) {
             if (page.name === `${userUuid} | ${actorUuid}`) {
-              const checked = pj.name === journal.flags?.type ? "checked" : "";
+              const checked =
+                pj.name === journal.flags["herald-hud"]?.type ? "checked" : "";
               listRadioButton += `
           <div style="margin-bottom:4px;">
             <input
@@ -1738,11 +1743,11 @@ async function heraldHud_renderListPartyJournalMiddleContainer() {
                   .val();
 
                 journal.name = partyJournalName;
-                journal.flags = journal.flags || {};
-                journal.flags.type = newType;
+                journal.flags = journal.flags["herald-hud"] || {};
+                journal.flags["herald-hud"].type = newType;
                 let journalEntry = await game.journal.get(journal.id).update({
                   name: partyJournalName,
-                  flags: { type: newType },
+                  flags: { "herald-hud": { type: newType } },
                 });
                 await bc.heraldHud_backupJournalPartyJournal(journalEntry);
                 setTimeout(async () => {
@@ -3721,21 +3726,21 @@ Hooks.on("createJournalEntryPage", (page, options, userId) => {
   const user = game.users.get(userId);
   const journal = page.parent;
 
-  heraldHud_journalingSocket.executeAsGM(
-    "backupHeralHudJournalByPage",
-    user,
-    journal
-  );
+  // heraldHud_journalingSocket.executeAsGM(
+  //   "backupHeralHudJournalByPage",
+  //   user,
+  //   journal
+  // );
 });
 Hooks.on("updateJournalEntryPage", async (page, changes, options, userId) => {
   const user = game.users.get(userId);
   const journal = page.parent;
 
-  heraldHud_journalingSocket.executeAsGM(
-    "backupHeralHudJournalByPage",
-    user,
-    journal
-  );
+  // heraldHud_journalingSocket.executeAsGM(
+  //   "backupHeralHudJournalByPage",
+  //   user,
+  //   journal
+  // );
   await heraldHud_renderListPartyJournalMiddleContainer();
   await heraldHud_renderListPersonalNotesMiddleContainer();
   await heraldHud_renderNpcsMiddleContainer();

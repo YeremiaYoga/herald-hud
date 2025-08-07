@@ -6151,9 +6151,15 @@ async function heraldHud_renderNpcDataActions(id) {
   let token = tokenDocument.object;
   let npc = await fromUuid(`Actor.${tokenDocument.actorId}`);
   let actionsListDiv = document.getElementById("heraldHud-npcActionsList");
-  let actionItems = npc.items.filter(
-    (item) => item.system.activation?.type == "action"
-  );
+  let actionItems = [];
+  for (let item of npc.items) {
+    const firstActivity = item.system.activities?.values().next().value ?? null;
+    if (firstActivity) {
+      if (firstActivity.activation?.type == "action") {
+        actionItems.push(item);
+      }
+    }
+  }
   let listActions = ``;
 
   for (let item of actionItems) {
@@ -6252,9 +6258,14 @@ async function heraldHud_renderNpcDataBonus(id) {
   let token = tokenDocument.object;
   let npc = await fromUuid(`Actor.${tokenDocument.actorId}`);
   let actionsListDiv = document.getElementById("heraldHud-npcBonusList");
-  let actionItems = npc.items.filter(
-    (item) => item.system.activation?.type == "bonus"
-  );
+   for (let item of npc.items) {
+    const firstActivity = item.system.activities?.values().next().value ?? null;
+    if (firstActivity) {
+      if (firstActivity.activation?.type == "bonus") {
+        actionItems.push(item);
+      }
+    }
+  }
   let listActions = ``;
 
   for (let item of actionItems) {
@@ -6351,9 +6362,14 @@ async function heraldHud_renderNpcDataReaction(id) {
   let token = tokenDocument.object;
   let npc = await fromUuid(`Actor.${tokenDocument.actorId}`);
   let actionsListDiv = document.getElementById("heraldHud-npcReactionList");
-  let actionItems = npc.items.filter(
-    (item) => item.system.activation?.type == "reaction"
-  );
+   for (let item of npc.items) {
+    const firstActivity = item.system.activities?.values().next().value ?? null;
+    if (firstActivity) {
+      if (firstActivity.activation?.type == "reaction") {
+        actionItems.push(item);
+      }
+    }
+  }
   let listActions = ``;
 
   for (let item of actionItems) {
@@ -6449,31 +6465,49 @@ async function heraldHud_renderNpcDataOther(id) {
   let token = tokenDocument.object;
   let npc = await fromUuid(`Actor.${tokenDocument.actorId}`);
   let actionsListDiv = document.getElementById("heraldHud-npcOtherList");
-  let otherActions = npc.items.filter(
-    (item) =>
-      item.system.activation?.type &&
-      item.system.activation.type !== "none" &&
-      !["action", "bonus", "reaction"].includes(item.system.activation.type) &&
-      !(item.type === "feat" && item.labels.featType === "Passive")
-  );
+
+  let actionItems = [];
+  for (let item of npc.items) {
+    const firstActivity = item.system.activities?.values().next().value ?? null;
+    if (firstActivity) {
+      if (
+        firstActivity.activation?.type &&
+        firstActivity.activation.type !== "none" &&
+        !["action", "bonus", "reaction"].includes(
+          firstActivity.activation.type
+        ) &&
+        !(item.type === "feat" && item.labels.featType === "Passive")
+      ) {
+        actionItems.push(item);
+      }
+    }
+  }
+  //   let otherActions = npc.items.filter(
+  //     (item) =>
+  //       item.system.activation?.type &&
+  //       item.system.activation.type !== "none" &&
+  //       !["action", "bonus", "reaction"].includes(item.system.activation.type) &&
+  //       !(item.type === "feat" && item.labels.featType === "Passive")
+  //   );
 
   let listActions = ``;
 
-  for (let item of otherActions) {
+  for (let item of actionItems) {
+    const firstActivity = item.system.activities?.values().next().value ?? null;
     let category = ``;
-    if (item.system.activation.type.includes("legendary")) {
+    if (firstActivity.activation.type.includes("legendary")) {
       category = `<i class="fa-solid fa-dragon" style="color:#0a35d1;"></i> Legendary Action |`;
-    } else if (item.system.activation.type.includes("lair")) {
+    } else if (firstActivity.activation.type.includes("lair")) {
       category = `<i class="fa-solid fa-chess-rook" style="color:#c7cad6;"></i> Lair Action |`;
-    } else if (item.system.activation.type.includes("mythic")) {
+    } else if (firstActivity.activation.type.includes("mythic")) {
       category = `<i class="fa-solid fa-spaghetti-monster-flying" style="color:#adffeb;"></i> Mythic Action |`;
-    } else if (item.system.activation.type.includes("minute")) {
-      category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${item.system.activation.cost} Minute |`;
-    } else if (item.system.activation.type.includes("hour")) {
-      category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${item.system.activation.cost} Hour |`;
-    } else if (item.system.activation.type.includes("day")) {
-      category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${item.system.activation.cost} Day |`;
-    } else if (item.system.activation.type.includes("special")) {
+    } else if (firstActivity.activation.type.includes("minute")) {
+      category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Minute |`;
+    } else if (firstActivity.activation.type.includes("hour")) {
+      category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Hour |`;
+    } else if (firstActivity.activation.type.includes("day")) {
+      category = `<i class="fa-solid fa-hourglass-start" style="color:#0ad1c4;"></i> ${firstActivity.activation.value} Day |`;
+    } else if (firstActivity.activation.type.includes("special")) {
       category = `<i class="fa-solid fa-sparkles" style="color:#d0f4fc;"></i> Special |`;
     }
     let arrProperti = [];
@@ -6584,12 +6618,20 @@ async function heraldHud_npcGetDataPassive(id) {
   let token = tokenDocument.object;
   let npc = await fromUuid(`Actor.${tokenDocument.actorId}`);
   let passiveListDiv = document.getElementById("heraldHud-npcPassiveList");
-  let passiveItems = npc.items.filter(
-    (item) =>
-      !item.system.activation ||
-      !item.system.activation.type ||
-      item.system.activation.type === "none"
-  );
+  let passiveItems = [];
+  for (let item of npc.items) {
+    const firstActivity = item.system.activities?.values().next().value ?? null;
+    console.log(ac);
+    if (firstActivity) {
+      if (
+        !firstActivity.activation ||
+        firstActivity.activation.type !== "none" ||
+        !firstActivity.activation.type
+      ) {
+        passiveItems.push(item);
+      }
+    }
+  }
   let listPassive = ``;
 
   for (let item of passiveItems) {
