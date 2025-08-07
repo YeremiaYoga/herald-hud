@@ -3612,6 +3612,8 @@ async function heraldHud_renderContainerStats() {
   await heraldHud_getDataStats();
 }
 async function heraldHud_getDataStats() {
+  const user = game.user;
+
   let actor = heraldHud_actorSelected;
   let statsListAbilitiesDiv = document.getElementById(
     "heraldHud-statsListAbilities"
@@ -3620,15 +3622,6 @@ async function heraldHud_getDataStats() {
   let abilitiesData = actor.system.abilities;
 
   let listAbilities = ``;
-
-  const abilitiesNames = {
-    str: "Strength",
-    dex: "Dexterity",
-    con: "Constitution",
-    int: "Intelligence",
-    wis: "Wisdom",
-    cha: "Charisma",
-  };
 
   for (let [key, abilityData] of Object.entries(abilitiesData)) {
     let abilityMod =
@@ -3668,18 +3661,21 @@ async function heraldHud_getDataStats() {
           let ability = event.target
             .closest(".heraldHud-abilitiesItem")
             .getAttribute("data-ability");
-          actor.rollAbilityTest(ability);
+          actor.rollAbilityCheck({ ability: ability });
         });
       });
 
     document
       .querySelectorAll(".heraldHud-abilitiesSaveButton")
       .forEach((button) => {
-        button.addEventListener("click", (event) => {
+        button.addEventListener("click", async (event) => {
           let ability = event.target
             .closest(".heraldHud-abilitiesItem")
             .getAttribute("data-ability");
-          actor.rollAbilitySave(ability);
+
+
+           actor.rollSavingThrow({ ability: ability });
+
         });
       });
   }

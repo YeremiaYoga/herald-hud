@@ -5,14 +5,6 @@ Hooks.on("ready", () => {
     await herald_hud.heraldHud_renderHtml();
     await herald_hud.heraldHud_renderHeraldHud();
   }, 1000);
-  JournalEntry.sheet = core.JournalTextTinyMCESheet;
-
-  for (let entry of game.journal.entries) {
-    if (!(entry.sheet instanceof core.JournalTextTinyMCESheet)) {
-      entry.sheet = new core.JournalTextTinyMCESheet(entry);
-      entry.render(true);
-    }
-  }
 });
 
 Hooks.once("init", () => {
