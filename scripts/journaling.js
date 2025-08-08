@@ -2236,12 +2236,12 @@ async function heraldHud_renderListQuest() {
     ".heraldHud-typeQuestContainer.active"
   );
   for (let quest of allQuestJournals) {
-    if (activeTypeEl && quest.flags.type !== activeTypeEl.dataset.name)
+    if (activeTypeEl && quest.flags["herald-hud"].type !== activeTypeEl.dataset.name)
       continue;
     let visibleButton = ``;
     let deleteButton = ``;
     if (user.isGM) {
-      const isVisible = quest.flags.visible === true;
+      const isVisible = quest.flags["herald-hud"].visible === true;
       const iconColor = isVisible ? "white" : "gray";
 
       visibleButton = `
@@ -2255,11 +2255,11 @@ async function heraldHud_renderListQuest() {
     </div>
     `;
     } else {
-      if (quest.flags.visible == false) {
+      if (quest.flags["herald-hud"].visible == false) {
         continue;
       }
     }
-    const matchType = typeQuest.find((t) => t.name === quest.flags.type);
+    const matchType = typeQuest.find((t) => t.name === quest.flags["herald-hud"].type);
     let src = matchType ? matchType.src : "";
 
     let page3 = "";
@@ -2276,7 +2276,7 @@ async function heraldHud_renderListQuest() {
       <div class="heraldHud-questItemTypeContainer">
          <img
             src="${src}"
-            alt="${quest.flags.type}"
+            alt="${quest.flags["herald-hud"].type}"
             class="heraldHud-questItemTypeImage"
           />
       
@@ -2311,7 +2311,7 @@ async function heraldHud_renderListQuest() {
         const newVisible = !currentVisible;
 
         await journal.update({
-          "flags.visible": newVisible,
+          "flags.herald-hud.visible": newVisible,
         });
         vsb.setAttribute("data-visible", newVisible);
         const icon = vsb.querySelector("i");
@@ -2720,13 +2720,13 @@ async function heraldHud_createJournalQuest(
       name: input,
       content: "",
       folder: typeFolder.id,
-      flags: {
+      flags: {"herald-hud":{
         visible: true,
         party: party,
         type: type,
         user: user.uuid,
         category: "Quest",
-      },
+      }},
       ownership: { default: 3 },
       pages: [
         {
@@ -2805,7 +2805,7 @@ async function heraldHud_renderQuestPage() {
   const pages = journal.pages.contents.slice(0, 3);
   const [page1, page2, page3] = pages;
 
-  const matchType = typeQuest.find((t) => t.name === journal.flags.type);
+  const matchType = typeQuest.find((t) => t.name === journal.flags["herald-hud"].type);
   let src = matchType ? matchType.src : "";
 
   let pageDetail = "";
@@ -2852,7 +2852,7 @@ async function heraldHud_renderQuestPage() {
         <div class="heraldHud-questDetailTypeContainer">  
           <img
             src="${src}"
-            alt="${journal.flags.type}"
+            alt="${journal.flags["herald-hud"].type}"
             class="heraldHud-questDetailType"
           /></div>
       </div>
@@ -2866,13 +2866,13 @@ async function heraldHud_renderQuestPage() {
       </div>
     </div>`;
 
-    if (user.isGM || journal.flags.type == "Players Quest") {
+    if (user.isGM || journal.flags["herald-hud"].type == "Players Quest") {
       const typeContainer = questDetail.querySelector(
         ".heraldHud-questDetailTypeContainer"
       );
       if (typeContainer) {
         typeContainer.addEventListener("click", () => {
-          const currentType = journal.flags?.type || "";
+          const currentType = journal.flags["herald-hud"]?.type || "";
 
           const optionsHtml = typeQuest
             .map((q, i) => {
@@ -2899,7 +2899,7 @@ async function heraldHud_renderQuestPage() {
                   if (!selected) return;
 
                   await journal.update({
-                    "flags.type": selected,
+                    "flags.herald-hud.type": selected,
                   });
 
                   await heraldHud_renderQuestPage();
@@ -3079,9 +3079,9 @@ async function heraldHud_gmCreateNpcsFolder(user) {
         folder: createdFolder.id,
         pages: [],
         content: "",
-        flags: {
+        flags: {"herald-hud" :{
           category: "Npcs",
-        },
+        }},
         ownership: { default: 3 },
       });
     }
@@ -3495,7 +3495,7 @@ async function heraldHud_renderNpcsMiddleContainer() {
       (j) => j.id === npc.journalId && j.folder?.id === npc.folderId
     );
     const foundPage = foundJournal?.pages.get(npc.pageId);
-    const favArray = foundPage?.flags?.favorites || [];
+    const favArray = foundPage?.flags["herald-hud"]?.favorites || [];
 
     const isFavorite = favArray.includes(user.id);
     if (isFavorite) favoriteNpcs.push(npc);
@@ -3654,17 +3654,17 @@ async function heraldHud_changeNpcsFavorite(data, type) {
     (j) => j.id === data.journalId && j.folder?.id === data.folderId
   );
   let foundPage = foundJournal?.pages.get(data.pageId);
-  let favorites = foundPage.flags?.favorites;
+  let favorites = foundPage.flags["herald-hud"]?.favorites;
   if (type == "notFavorited") {
     if (!favorites) {
       await foundPage.update({
-        "flags.favorites": [user.id],
+        "flags.herald-hud.favorites": [user.id],
       });
     } else {
       if (!favorites.includes(user.id)) {
         favorites.push(user.id);
         await foundPage.update({
-          "flags.favorites": favorites,
+          "flags.herald-hud.favorites": favorites,
         });
       }
     }
@@ -3673,7 +3673,7 @@ async function heraldHud_changeNpcsFavorite(data, type) {
       let updatedFavorites = favorites.filter((id) => id !== user.id);
 
       await foundPage.update({
-        "flags.favorites": updatedFavorites,
+        "flags.herald-hud.favorites": updatedFavorites,
       });
     }
   }
