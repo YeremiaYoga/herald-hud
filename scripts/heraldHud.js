@@ -3673,9 +3673,7 @@ async function heraldHud_getDataStats() {
             .closest(".heraldHud-abilitiesItem")
             .getAttribute("data-ability");
 
-
-           actor.rollSavingThrow({ ability: ability });
-
+          actor.rollSavingThrow({ ability: ability });
         });
       });
   }
@@ -6258,7 +6256,8 @@ async function heraldHud_renderNpcDataBonus(id) {
   let token = tokenDocument.object;
   let npc = await fromUuid(`Actor.${tokenDocument.actorId}`);
   let actionsListDiv = document.getElementById("heraldHud-npcBonusList");
-   for (let item of npc.items) {
+  let actionItems = [];
+  for (let item of npc.items) {
     const firstActivity = item.system.activities?.values().next().value ?? null;
     if (firstActivity) {
       if (firstActivity.activation?.type == "bonus") {
@@ -6362,7 +6361,8 @@ async function heraldHud_renderNpcDataReaction(id) {
   let token = tokenDocument.object;
   let npc = await fromUuid(`Actor.${tokenDocument.actorId}`);
   let actionsListDiv = document.getElementById("heraldHud-npcReactionList");
-   for (let item of npc.items) {
+  let actionItems = [];
+  for (let item of npc.items) {
     const firstActivity = item.system.activities?.values().next().value ?? null;
     if (firstActivity) {
       if (firstActivity.activation?.type == "reaction") {
@@ -6621,17 +6621,23 @@ async function heraldHud_npcGetDataPassive(id) {
   let passiveItems = [];
   for (let item of npc.items) {
     const firstActivity = item.system.activities?.values().next().value ?? null;
-    console.log(ac);
     if (firstActivity) {
       if (
         !firstActivity.activation ||
-        firstActivity.activation.type !== "none" ||
-        !firstActivity.activation.type
+        firstActivity.activation.type === "none"
       ) {
         passiveItems.push(item);
       }
     }
+    if (item.type === "feat") {
+      console.log(item);
+      const activation = item.labels?.featType == "Passive";
+      if (activation) {
+        passiveItems.push(item);
+      }
+    }
   }
+
   let listPassive = ``;
 
   for (let item of passiveItems) {
