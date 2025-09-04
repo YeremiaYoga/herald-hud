@@ -128,7 +128,7 @@ Hooks.once("init", () => {
     scope: "client",
     config: true,
     type: Boolean,
-    default: false,
+    default: true,
   });
 
   game.settings.register("herald-hud", "hudBgDialog", {

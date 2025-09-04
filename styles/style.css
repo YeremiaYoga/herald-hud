@@ -3402,9 +3402,9 @@
 }
 
 .heraldHud-npcDialogCloseButtonContainer {
-    position: fixed;
-    left: 58%;
-    bottom: 49%;
+    position: absolute;
+    left: 64%;
+    bottom: 54%;
     z-index: 18;
     cursor: pointer;
 }
