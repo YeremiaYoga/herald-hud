@@ -10,7 +10,6 @@ Hooks.once("socketlib.ready", () => {
     "createPersonalNotesFolder",
     async (user) => {
       await heraldHud_gmCreatePersonalNotesFolder(user);
-      await bc.heraldHud_createCompendiumPersonalNotesFolder(user);
     }
   );
 
@@ -25,7 +24,7 @@ Hooks.once("socketlib.ready", () => {
     "createPartyJournalFolder",
     async (user) => {
       await heraldHud_gmCreatePartyJournalFolder(user);
-      await bc.heraldHud_createCompediumPartyJournalFolder();
+      // await bc.heraldHud_createCompediumPartyJournalFolder();
     }
   );
 
@@ -68,11 +67,11 @@ Hooks.once("socketlib.ready", () => {
 
   heraldHud_journalingSocket.register("createNpcsFolder", async (user) => {
     await heraldHud_gmCreateNpcsFolder(user);
-    await bc.heraldHud_createCompediumNpcsFolder();
+    // await bc.heraldHud_createCompediumNpcsFolder();
   });
 
   heraldHud_journalingSocket.register("backupHeraldHudNpcs", async (uuid) => {
-    await bc.heraldHud_backupJournalNpcs(uuid);
+    // await bc.heraldHud_backupJournalNpcs(uuid);
   });
 });
 async function heraldHud_renderListMenu() {
@@ -594,7 +593,7 @@ async function heraldHud_createPersonalNotes(user, input, type) {
     ownership: { default: 3 },
   });
 
-  await bc.heraldHud_backupJournalPersonalNotes(user, journalEntry);
+
 }
 
 async function heraldHud_renderListPersonalNotesMiddleContainer() {
@@ -920,10 +919,10 @@ async function heraldHud_renderListPersonalNotesMiddleContainer() {
                   name: newName,
                   flags: { "herald-hud": { type: finalType } },
                 });
-                await bc.heraldHud_backupJournalPersonalNotes(
-                  user,
-                  journalEntry
-                );
+                // await bc.heraldHud_backupJournalPersonalNotes(
+                //   user,
+                //   journalEntry
+                // );
 
                 await heraldHud_renderListPersonalNotesMiddleContainer();
               },

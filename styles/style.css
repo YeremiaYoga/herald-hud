@@ -94,7 +94,7 @@
 }
 
 .heraldHud-detailEffectDuration {
-   
+
     padding: 4px;
     display: inline-block;
     background-color: rgba(255, 51, 0, 0.5);
@@ -144,36 +144,36 @@
     -moz-border-radius: 50%;
     -ms-border-radius: 50%;
     -o-border-radius: 50%;
-    margin-bottom: 15px;
+
 }
 
 .heraldHud-addSummonWrapper {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
 }
 
 .heraldHud-addSummonTooltip {
-  visibility: hidden;
-  background-color: #222;
-  color: #fff;
-  text-align: center;
-  padding: 4px 8px;
-  border-radius: 6px;
-  position: absolute;
-  z-index: 20;
-  bottom: 125%; 
-  left: 50%;
-  transform: translateX(-50%);
-  opacity: 0;
-  transition: opacity 0.3s;
-  white-space: nowrap;
-  font-size: 12px;
+    visibility: hidden;
+    background-color: #222;
+    color: #fff;
+    text-align: center;
+    padding: 4px 8px;
+    border-radius: 6px;
+    position: absolute;
+    z-index: 20;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+    white-space: nowrap;
+    font-size: 12px;
 }
 
 .heraldHud-addSummonWrapper:hover .heraldHud-addSummonTooltip {
-  visibility: visible;
-  opacity: 1;
+    visibility: visible;
+    opacity: 1;
 }
 
 
@@ -1245,7 +1245,8 @@
     display: flex;
     gap: 5px;
     align-items: center;
-    left: 20%;
+    left: 19%;
+    margin-top: 5px;
 }
 
 .heraldHud-actionContainer div {
@@ -1285,9 +1286,10 @@
 
 .heraldHud-preparedSpellsActionContainer {
     position: absolute;
-    left: 86%;
+    left: 87%;
     z-index: 16;
     cursor: pointer;
+    margin-top: 5px;
 }
 
 
@@ -1396,7 +1398,7 @@
 
 .heraldHud-tempShieldContainer {
     position: absolute;
-    top: 3px;
+    top: 1%;
     left: -4%;
     z-index: 15;
     width: 25px;
@@ -3129,7 +3131,7 @@
     border-radius: 5px;
     background-color: #363636;
     z-index: 100;
-    top: -100%;
+    top: -50%;
     margin-left: -10px;
 }
 
@@ -3402,9 +3404,9 @@
 }
 
 .heraldHud-npcDialogCloseButtonContainer {
-    position: absolute;
-    left: 64%;
-    bottom: 54%;
+    position: fixed;
+    left: 54%;
+    bottom: 44%;
     z-index: 18;
     cursor: pointer;
 }
@@ -3726,7 +3728,7 @@
 
 .heraldHud-npcDataTooltipContainer {
     position: absolute;
-    bottom: 150%;
+    bottom: 110%;
     color: white;
 }
 
@@ -3897,6 +3899,7 @@
     left: 102%;
     z-index: 16;
     cursor: pointer;
+    margin-top: 5px;
 }
 
 .heraldHud-weaponMasteryWrapper {

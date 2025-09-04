@@ -3,6 +3,7 @@
   left: 95%;
   z-index: 16;
   cursor: pointer;
+  margin-top: 5px;
 }
 
 .heraldHud-journalingWrapper {

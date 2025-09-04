@@ -1109,7 +1109,7 @@ async function heraldHud_updateEffectActor() {
 
     const effectDetailDiv = `
     <div class="heraldHud-effectTooltip" style="display: none;">
-      <h3>${effect.name}</h3>
+      <div style="font-size:14px">${effect.name}</div>
       <div>${enrichedDescription}</div>
       <div id="heraldHud-detailEffectBottom" class="heraldHud-detailEffectBottom">
         <div id="heraldHud-detailEffectType" class="heraldHud-detailEffectType">
@@ -6628,7 +6628,7 @@ async function heraldHud_npcGetDataPassive(id) {
       ) {
         passiveItems.push(item);
       }
-    }
+    } 
     if (item.type === "feat") {
       console.log(item);
       const activation = item.labels?.featType == "Passive";
